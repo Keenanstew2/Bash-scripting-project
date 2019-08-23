@@ -1,0 +1,56 @@
+NAME
+    Fileman
+
+SYNOPSIS
+    
+
+DESCRIPTION
+    This script is aceepts various flags and parameters from the UNIX command line. This script also dissallows erroneous input given with the command line.      
+
+    
+    Options:
+    -a  Displays an alphabetical listing of all files 
+    -h  Displays a listing of hidden files 
+    -hs Displays a listing of hidden files accordeing to acending order of a file. 
+    -o  Displays a listing of only directories 
+    -os Displays a listing if directories according to assending order of files size
+    -f  Displays permissinos for a given file
+    -m  Moves file from a source to destination directories 
+    -d  Deletes entire directory 
+    -xo Displays only odd lines of a file 
+    -xe Displays only even lines of a file
+    -x  Displays specifc lines of a file. Parameters are numerical inthe form 1-9; 2-3; etc.
+    -u  Delets specific lines of a file
+    -pn Displays the file using full screens and numbered lines 
+    -r  Replaces strings with a specifed file 
+    -c  Replaces specified characters whithin a file 
+    -v  Verifies the exsistence of a file or directory, and list attributtes.
+    -l  Adds line numbers to a file ans store results 
+    -z  Displays file contents in reverse 
+    -b  Displays the largest file in a directory 
+    -s  Displays the smallest file in a directory 
+    -fa Displays the directory files in accedning order based in file size.
+    -fd Displays the directoy files in descending order based on file size. 
+    -q  Replaces specific line number of the file with the specified content. 
+    -mi Displays mirror image of text file contents. 
+    -jb Adds the specified text before the stated row number.
+    -ja Adds the specified text after the stated row number. 
+    -rd Displays the difference between two directories. 
+    -slod Displays alphabetically sorted list of all open files for the specified user. 
+    -rc Replaces a specified column co 1 content of a file with the contents of the col2    
+        parameter. 
+
+     
+FILES   
+      ## insert path to files used
+
+
+ 
+    Exit Status:
+    Returns success unless an invalid option is given.
+
+SEE ALSO
+    bash(1)
+
+
+
