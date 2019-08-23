@@ -1,0 +1,192 @@
+#!/bin/bash
+#################################
+# civilian to military time: -n #
+#################################
+function civ2mil {
+	#################
+	#local variables#
+	#################
+	chour=${1:0:2}
+	cmin=${1:3:5}
+	postfix=$2
+	mtime=0
+	##################
+	#setting the time#
+	##################
+	if [[ ($chour < 1) || ($chour > 12) ]]; then
+		echo "Error!! Please check input and try again."
+		exit
+	fi
+    if [[ ($cmin < 0) || ($cmin > 59) ]]; then
+		echo "Error!! Please check input and try again."
+		exit
+	fi
+	if [[ (($postfix == "am") || ($postfix == "AM")) && ($chour < 12 ) ]]; then
+		mtime="$chour""$cmin"
+	elif [[ (($postfix == "am") || ($postfix == "AM")) && ($chour == 12) ]]; then
+		mtime="00""$cmin"
+	elif [[ (($postfix == "pm") || ($postfix == "PM")) && ($chour < 12) ]]; then
+		chour=$(($chour + 12))
+		mtime="$chour""$cmin"
+	elif [[ (($postfix == "pm") || ($postfix == "PM")) && ($chour == 12 ) ]]; then
+		mtime="$chour""$cmin"
+	else
+		echo "Error!! Please check you input and try again."
+		exit
+	fi
+	############################
+	#printing the military time#
+	############################
+	echo "civilian to military: $mtime"
+}
+#################################
+# military to civilian time: -m #
+#################################
+function mil2civ {
+	#################
+	#local variables#
+	#################
+	mhour=${1:0:2}
+	mmin=${1:2}
+	ctime=0
+	postfix=0
+	##################
+	#setting the time#
+	##################
+	if [[ ($mhour < 0) || ($mhour > 23) ]]; then
+		echo "Error!! Please check input and try again."
+		exit
+	fi
+    if [[ ($mmin < 0) || ($mmin > 59) ]]; then
+		echo "Error!! Please check input and try again."
+		exit
+	fi		
+	if [[ $mhour == "00" ]]; then
+		ctime="12:$mmin"
+		postfix="AM"
+	elif [[ ($mhour > 0) && ($mhour < 12) ]]; then
+		ctime="$mhour:$mmin"
+		postfix="AM"
+	elif [[ $mhour == 12 ]]; then
+		ctime="$mhour:$mmin"
+		postfix="PM"
+	elif [[ ($mhour > 12) && ($mhour < 24) ]]; then
+		mhour=$(($mhour - 12))
+		ctime="$mhour:$mmin"
+		postfix="PM"
+	else
+		echo "Error!! Please check you inputs and try again."
+		exit
+	fi
+	############################
+	#printing the civilian time#
+	############################
+	echo "military to civilian: $ctime $postfix "
+}
+###############################
+# one timezone to another: -z #
+###############################
+function timezone {
+	mhour=${1:0:2}
+	mmin=${1:2}
+	zone1=$2
+	zone2=$3
+	utc=0
+	mtime=0
+	########################
+	#turns time to UTC time#
+	########################
+    if [[ ($mhour < 0) || ($mhour > 23) ]]; then
+		echo "Error!! Please check your input and try again."
+		exit
+	fi    
+    if [[ ($mmin < 0) || ($mmin > 59) ]]; then
+		echo "Error!! Please check your input and try again."
+		exit
+	fi	
+    case $zone1 in
+		AST) utc=$(($mhour + 4)) ;;
+		EST) utc=$(($mhour + 5)) ;;
+		CST) utc=$(($mhour + 6)) ;;
+		MST) utc=$(($mhour + 7)) ;;
+		PST) utc=$(($mhour + 8)) ;;
+		AKST) utc=$(($mhour + 9)) ;;
+		HST) utc=$(($mhour + 10)) ;;
+		SST) utc=$(($mhour + 11)) ;;
+		ChST) utc=$(($mhour - 10)) ;;
+		*) 
+			echo "Error!! Unknown time zone. Please check input."
+			exit
+			;;
+	esac
+	###############################################
+	#changes the UTC time to the desired time zone#
+	###############################################
+	case $zone2 in
+		AST) mhour=$(($utc - 4)) ;;
+		EST) mhour=$(($utc - 5)) ;;
+		CST) mhour=$(($utc - 6)) ;;
+		MST) mhour=$(($utc - 7)) ;;
+		PST) mhour=$(($utc - 8)) ;;
+		AKST) mhour=$(($utc - 9)) ;;
+		HST) mhour=$(($utc - 10)) ;;
+		SST) mhour=$(($utc - 11)) ;;
+		ChST) mhour=$(($utc + 10)) ;;
+		*)
+			echo "Error!! Unknown time zone. Please check input."
+			exit
+			;;
+	esac
+	######################################
+	#insures that hours is between 0 - 23#
+	#insures that minutes is between 0-59#
+	######################################
+	if [[ $mhour -gt 23 ]]; then
+		mhour=$(($mhour - 24))
+	fi
+	mtime="$mhour""$mmin"
+	#######################
+	#prints out the answer#
+	#######################
+	echo "The time from $zone1 to $zone2 is: $mtime $zone2"
+}
+##########################################
+# system uptime since last recycling: -u #
+##########################################
+function sysUptime {
+	echo "$(uptime)"
+}
+###############################################
+# this handles the options and function calls #
+###############################################
+while getopts :hm:n:uz: opt; do
+	case "$opt" in
+		h)
+			echo "This command does four things:
+				1) It converts military time to civilian time using the -m option and the time.
+					ex. timeform -m 1600 or timeform -m 0400
+				2) It converts civilian time to military time using the -n option and the time.
+					ex. timeform -n 04:00 PM or timeform -n 04:00 pm
+				3) It converts one timezone to another using the -z option.
+					ex. timeform -z 1600 EST CST
+				4) It prints out the System Uptime since the last recycle time using the -u option.
+					ex. timeform -u"
+			;;
+		m)
+			mil2civ $2
+			;;
+		n)
+			civ2mil $2 $3
+			;;
+		u)
+			sysUptime
+			;;
+		z)
+			timezone $2 $3 $4
+			;;
+		*)
+			echo "ERROR!! Please use a valid option: -m, -n, -u, or -z."
+			;;
+	esac
+done
+exit

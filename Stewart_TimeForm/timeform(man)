@@ -1,0 +1,24 @@
+TIMEFORM(1)
+
+timeform - time manipulation module
+
+timeform [-opt] time
+
+Description
+The purpose of this command is to convert from civilian time to military time and vise versa. It also is used to change the time zone from one to another. The last use of this command is to print out the system uptime.
+
+Options
+-h help
+-m military to civilian time
+-n civilian to military time
+-u system uptime
+-z changing time zones
+
+Files
+/usr/local/bin/timeform
+/usr/local/man/timeform
+
+Author
+Marcus Hudgins
+
+Linux			Last change: Oct 29, 2018
